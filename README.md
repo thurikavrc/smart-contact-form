@@ -43,13 +43,13 @@ A full-stack contact form built with **React** and **n8n** that handles form sub
 ## 📸 Screenshots
 
 ### Contact Form
-![Contact Form](screenshots/contact-form.png)
+![Contact Form](screenshotscontact-form.png)
 
 ### Google Sheets Log
-![Google Sheets](screenshots/google-sheets.png)
+![Google Sheets](screenshotsgoogle-sheets.png)
 
 ### n8n Workflow
-![n8n Workflow](screenshots/n8n-workflow.png)
+![n8n Workflow](screenshotsn8n-workflow.png)
 
 ---
 
