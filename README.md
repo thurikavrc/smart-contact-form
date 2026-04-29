@@ -46,7 +46,7 @@ A full-stack contact form built with **React** and **n8n** that handles form sub
 ![Contact Form](screenshotscontact-form.png)
 
 ### Google Sheets Log
-![Google Sheets](screenshotsgoogle-sheets.png)
+![Google Sheets](screenshotsgoogle-sheets(2).png)
 
 ### n8n Workflow
 ![n8n Workflow](screenshotsn8n-workflow.png)
