@@ -1,0 +1,313 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "contact-form",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        -224
+      ],
+      "id": "be7e3839-a95b-4037-8023-cbc89525d054",
+      "name": "Webhook",
+      "webhookId": "e9eba540-5068-4881-ab5c-5d3f949c1fd1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"message\": \"success\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        416,
+        64
+      ],
+      "id": "9f0120fc-895f-4352-af9d-fae31992a979",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.email }}",
+        "subject": "=New Contact Form Message from {{ $json.body.name }}",
+        "emailType": "text",
+        "message": "=You have received a new contact form submission!\n\nName: {{ $json.body.name }}\nEmail: {{ $json.body.email }}\nMessage: {{ $json.body.message }}\n\n---\nThis email was sent automatically via n8n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        160,
+        64
+      ],
+      "id": "e5c4b3ca-13ba-4b87-8e48-c88f3567afba",
+      "name": "Send to admin",
+      "webhookId": "de364b2a-9ad8-4995-ab7b-57d8c196f750",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "H5B0RhiZBizLpjDx",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "=Thank you for contacting us, {{ $('Webhook').item.json.body.name }}!",
+        "message": "=Hi {{ $('Webhook').item.json.body.name }},  Thank you for reaching out to us! 😊  We have received your message and will get back to you as soon as possible.  Here's a copy of what you sent us: ------------------------------------------ Message: {{ $('Webhook').item.json.body.message }} ------------------------------------------  Best regards, The Support Team  --- This email was sent automatically via n8n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        64
+      ],
+      "id": "5984f9a3-c836-4869-bcb3-4ddbc5f980e6",
+      "name": "Send Confirmation to user",
+      "webhookId": "401ed006-2dd4-4135-ad9c-26c887dc389e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "H5B0RhiZBizLpjDx",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1YC3qm6u_-o5rtYT9vEKOH6cZIRmheQ_p5VTPPIi6ZgU",
+          "mode": "list",
+          "cachedResultName": "Contact Form Submissions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YC3qm6u_-o5rtYT9vEKOH6cZIRmheQ_p5VTPPIi6ZgU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YC3qm6u_-o5rtYT9vEKOH6cZIRmheQ_p5VTPPIi6ZgU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name ": "={{ $('Webhook').item.json.body.name }}",
+            "Email": "={{ $('Webhook').item.json.body.email }}",
+            "Timestamp": "={{ new Date().toLocaleString() }}",
+            "Message": "={{ $('Webhook').item.json.body.message }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name ",
+              "displayName": "Name ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        800,
+        64
+      ],
+      "id": "5f2ae9cf-970a-47ec-b387-93469f48494f",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "z2fILrL7awXKn35N",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8591f9a1-3557-4b00-ba03-b91bbf790d06",
+              "leftValue": "={{ $json.body.message.toLowerCase() }}",
+              "rightValue": "buy",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "2ceedeb9-6970-40a7-8b6e-e48003878189",
+              "leftValue": "={{ $json.body.message.toLowerCase() }}",
+              "rightValue": "cheap",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "c96d7e93-772e-457d-9d54-99971becd49e",
+              "leftValue": "={{ $json.body.message.toLowerCase() }}",
+              "rightValue": "free",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "a9b67289-67da-42b4-8e9e-f25452a25012",
+              "leftValue": "={{ $json.body.message.toLowerCase() }}",
+              "rightValue": "win",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "4d9e9d73-05e3-4e32-a823-bdf48eb5c668",
+              "leftValue": "={{ $json.body.message.toLowerCase() }}",
+              "rightValue": "click here",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        80,
+        -224
+      ],
+      "id": "2b410a3e-64e0-4dd4-8077-81c3760e17a7",
+      "name": "If"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        [
+          {
+            "node": "Send Confirmation to user",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to admin": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Confirmation to user": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send to admin",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f7e6cb75-f4c5-40a8-a642-863fc3ef030c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fe02210e87153297b2c642026292663aaeacbf57297e59263b71dd79af6a0b03"
+  },
+  "id": "sT7Vciot04fcxAmR",
+  "tags": []
+}
