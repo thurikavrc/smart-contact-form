@@ -1,70 +1,117 @@
-# Getting Started with Create React App
+# 📬 Smart Contact Form with Email Automation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack contact form built with **React** and **n8n** that handles form submissions, sends email notifications, and logs data to Google Sheets — all automatically.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Features
 
-### `npm start`
+- **Form Validation** — Real-time input validation to ensure clean data submission
+- **Loading Spinner** — Visual feedback while the form is being submitted
+- **Character Counter** — Live character count for the message field (max 500)
+- **Confirmation Email** — Automated email sent to the user upon successful submission
+- **Admin Notification** — Instant email alert sent to the admin for every new submission
+- **Google Sheets Logging** — Every submission is automatically saved to a Google Sheet with a timestamp
+- **Spam Protection** — n8n workflow filters and validates incoming data before processing
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠️ Tech Stack
 
-### `npm test`
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React.js |
+| Automation | n8n (self-hosted) |
+| Email | Gmail (via n8n) |
+| Database | Google Sheets (via n8n) |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## ⚙️ How It Works
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. User fills out the contact form (Name, Email, Message) in the React app
+2. On submit, the form sends a **POST request** to an n8n Webhook
+3. n8n checks for spam using an **If condition**
+4. If valid:
+   - Sends a **notification email to the admin**
+   - Sends a **confirmation email to the user**
+   - **Appends a new row** to Google Sheets with timestamp, name, email, and message
+5. The React app displays a **"Message sent successfully!"** confirmation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 📸 Screenshots
 
-### `npm run eject`
+### Contact Form
+![Contact Form](screenshots/contact-form.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Google Sheets Log
+![Google Sheets](screenshots/google-sheets.png)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### n8n Workflow
+![n8n Workflow](screenshots/n8n-workflow.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🧩 n8n Workflow Structure
 
-## Learn More
+```
+Webhook (POST)
+    └── If (Spam check)
+            └── [true] Send to Admin (Gmail)
+                    └── Respond to Webhook
+                            └── Send Confirmation to User (Gmail)
+                                    └── Append Row in Google Sheet
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📂 Project Structure
 
-### Code Splitting
+```
+smart-contact-form/
+├── public/
+│   └── index.html
+├── src/
+│   ├── App.js
+│   ├── App.css
+│   └── index.js
+├── n8n-workflow.json      ← Import this into n8n
+├── package.json
+└── README.md
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+## 🖥️ Running Locally
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/thurikavrc/smart-contact-form.git
+   cd smart-contact-form
+   ```
 
-### Making a Progressive Web App
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+3. **Start the React app**
+   ```bash
+   npm start
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Advanced Configuration
+4. **Import the n8n workflow**
+   - Open your n8n instance
+   - Click **"Import from file"**
+   - Select `n8n-workflow.json`
+   - Update your Gmail and Google Sheets credentials
+   - Activate the workflow
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## 👩‍💻 Author
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Thurika Ramatchandiran**  
+[GitHub](https://github.com/thurikavrc)
